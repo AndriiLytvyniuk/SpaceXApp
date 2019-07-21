@@ -1,12 +1,12 @@
 package alytvyniuk.com.spacexapp
 
+import android.content.Context
 import android.os.Bundle
-import com.google.android.material.snackbar.Snackbar
-import androidx.appcompat.app.AppCompatActivity;
-import android.view.Menu
-import android.view.MenuItem
-
+import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentStatePagerAdapter
 import kotlinx.android.synthetic.main.activity_main.*
+
 
 class MainActivity : AppCompatActivity() {
 
@@ -14,26 +14,31 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
+        val fragmentsNumber = 2
+        viewPager.adapter = TabsAdapter(supportFragmentManager, fragmentsNumber, this)
+        tabLayout.setupWithViewPager(viewPager)
+    }
 
-        fab.setOnClickListener { view ->
-            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show()
+    inner class TabsAdapter(
+        fm: FragmentManager,
+        private val tabsNumber: Int,
+        private val context: Context
+    ) : FragmentStatePagerAdapter(fm) {
+
+        override fun getCount(): Int {
+            return tabsNumber
         }
-    }
 
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        menuInflater.inflate(R.menu.menu_main, menu)
-        return true
-    }
+        override fun getItem(position: Int) = when (position) {
+            0 -> LaunchesFragment()
+            1 -> StatisticsFragment()
+            else -> throw IllegalArgumentException("Unknown tab")
+        }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        return when (item.itemId) {
-            R.id.action_settings -> true
-            else -> super.onOptionsItemSelected(item)
+        override fun getPageTitle(position: Int): String = when (position) {
+            0 -> context.getString(R.string.launches)
+            1 -> context.getString(R.string.statistics)
+            else -> throw IllegalArgumentException("Unknown tab")
         }
     }
 }
