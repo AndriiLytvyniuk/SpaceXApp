@@ -6,7 +6,16 @@ import io.reactivex.Single
 
 internal class LaunchesRetrofitClient(private val launchesRetrofitApi: LaunchesRetrofitApi) : LaunchesRepository {
     override fun getLaunchesInRange(start: Int, count: Int): Single<Result<List<LaunchData>>> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        return launchesRetrofitApi.getLaunches(start, count)
+            .map { t ->
+                if (t.isSuccessful) {
+                    val l = t.body()?.map { responseModel ->
+                        LaunchData(responseModel.flight_number)
+                    } ?: emptyList()
+                    Result.success(l)
+                }
+                Result.failure<List<LaunchData>>(Throwable(t.message()))
+            }
     }
 
     override fun getAllLaunches(): Single<Result<List<LaunchData>>> {
@@ -18,7 +27,7 @@ internal class LaunchesRetrofitClient(private val launchesRetrofitApi: LaunchesR
                     } ?: emptyList()
                     Result.success(l)
                 }
-                Result.failure(Throwable(t.message()))
+                Result.failure<List<LaunchData>>(Throwable(t.message()))
             }
     }
 }
