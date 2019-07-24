@@ -9,14 +9,30 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 
 class LaunchesViewModel(private val launchesRepository: LaunchesRepository) : ViewModel() {
 
     @VisibleForTesting
-    val liveData: MutableLiveData<LaunchesResponse> = MutableLiveData()
+    val launchesLiveData: MutableLiveData<LaunchesResponse> = MutableLiveData()
 
     fun observe(@NonNull owner: LifecycleOwner, @NonNull observer: Observer<LaunchesResponse>) {
-        liveData.observe(owner, observer)
+        launchesLiveData.observe(owner, observer)
+    }
+
+    fun requestLaunches(start: Int, count: Int) {
+        val disposable = launchesRepository.getLaunchesInRange(start, count)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe({ result ->
+                if (result.isSuccess) {
+                    launchesLiveData.value = LaunchesResponse(result.getOrThrow())
+                }
+
+            }, { t ->
+                launchesLiveData.value = LaunchesResponse(exception = t)
+            })
     }
 }
 
