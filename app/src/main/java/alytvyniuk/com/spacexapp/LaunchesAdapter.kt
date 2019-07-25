@@ -19,14 +19,12 @@ class LaunchesAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             throw IllegalArgumentException("Start position is bigger than possible")
         }
         val numberToReplace = items.size - start
-        var counter = 0
-        newItems.forEach {newItem ->
+        newItems.forEachIndexed { counter, newItem ->
             if (counter < numberToReplace) {
                 items[start + counter] = newItem
             } else {
                 items.add(newItem)
             }
-            counter++
         }
     }
 

@@ -1,47 +1,69 @@
 package alytvyniuk.com.spacexapp
 
-import alytvyniuk.com.model.LaunchData
 import alytvyniuk.com.model.LaunchesRepository
 import androidx.annotation.NonNull
-import androidx.annotation.VisibleForTesting
-import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.*
 import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
+import javax.inject.Inject
+
 
 class LaunchesViewModel(private val launchesRepository: LaunchesRepository) : ViewModel() {
 
-    @VisibleForTesting
-    val launchesLiveData: MutableLiveData<LaunchesResponse> = MutableLiveData()
+    private val launchesLiveData = MutableLiveData<MutableList<LaunchesListItem>>().apply {
+        this.value = mutableListOf()
+    }
+    private val disposables = CompositeDisposable()
 
-    fun observe(@NonNull owner: LifecycleOwner, @NonNull observer: Observer<LaunchesResponse>) {
+    fun observe(@NonNull owner: LifecycleOwner, @NonNull observer: Observer<MutableList<LaunchesListItem>>) {
         launchesLiveData.observe(owner, observer)
     }
 
     fun requestLaunches(start: Int, count: Int) {
-        val disposable = launchesRepository.getLaunchesInRange(start, count)
+        val items = launchesLiveData.value ?: mutableListOf()
+        if (start > items.size) {
+            throw IllegalArgumentException("Start position is bigger than possible")
+        }
+        val numberToReplace = items.size - start
+        repeat(count) { i ->
+            if (i < numberToReplace) {
+                items[start + i] = ProgressItem
+            } else {
+                items.add(ProgressItem)
+            }
+        }
+        launchesLiveData.value = items
+
+        disposables.add(launchesRepository.getLaunchesInRange(start, count)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({ result ->
                 if (result.isSuccess) {
-                    launchesLiveData.value = LaunchesResponse(result.getOrThrow())
+                    val oldItems = launchesLiveData.value!!
+                    result.getOrNull()!!.forEachIndexed { i, newItem ->
+                        oldItems[start + i] = LaunchesDataItem(newItem)
+                    }
                 }
 
             }, { t ->
-                launchesLiveData.value = LaunchesResponse(exception = t)
-            })
+                //launchesLiveData.value = LaunchesResponse(exception = t)
+            }))
     }
+
+    override fun onCleared() {
+        super.onCleared()
+        disposables.clear()
+    }
+
 }
 
-class LaunchesModelFactory(private val launchesRepository: LaunchesRepository) : ViewModelProvider.Factory {
+class LaunchesModelFactory @Inject constructor(
+    private val launchesRepository: LaunchesRepository
+) : ViewModelProvider.Factory {
 
     @SuppressWarnings("unchecked")
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
         return LaunchesViewModel(launchesRepository) as T
     }
 }
-
-data class LaunchesResponse(val barcode: List<LaunchData>? = null, val exception: Throwable? = null)

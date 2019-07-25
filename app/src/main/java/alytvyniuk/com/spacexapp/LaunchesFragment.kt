@@ -5,11 +5,20 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.fragment_launches.*
+import javax.inject.Inject
 
 class LaunchesFragment: Fragment() {
+
+    @Inject
+    lateinit var launchesModelFactory: LaunchesModelFactory
+
+    init {
+        App.component().inject(this)
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         return inflater.inflate(R.layout.fragment_launches, container, false)
@@ -29,6 +38,9 @@ class LaunchesFragment: Fragment() {
         }
         adapter.insertItems(0, listOf(ProgressItem, ProgressItem, ProgressItem, ProgressItem))
         adapter.notifyDataSetChanged()
+
+        val viewModel = ViewModelProviders.of(this, launchesModelFactory).get(LaunchesViewModel::class.java)
     }
+
 
 }
