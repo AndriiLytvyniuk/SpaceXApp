@@ -37,7 +37,7 @@ class LaunchesAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (holder) {
             is LaunchesViewHolder -> {
-
+                holder.bind(items[position] as LaunchesDataItem)
             }
         }
     }

@@ -14,7 +14,7 @@ internal class LaunchesRetrofitClient(private val launchesRetrofitApi: LaunchesR
                     } ?: emptyList()
                     Result.success(l)
                 } else {
-                    Result.failure<List<LaunchData>>(Throwable(t.message()))
+                    Result.failure(Throwable(t.message()))
                 }
             }
     }
