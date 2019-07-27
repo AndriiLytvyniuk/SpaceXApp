@@ -20,7 +20,7 @@ class RepositoriesModule {
             Retrofit.Builder()
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .addConverterFactory(GsonConverterFactory.create())
-                .baseUrl("https://en.wikipedia.org/w/")
+                .baseUrl("https://api.spacexdata.com/")
                 .build()
                 .create(LaunchesRetrofitApi::class.java)
         )

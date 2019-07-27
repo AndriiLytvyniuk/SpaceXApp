@@ -22,17 +22,7 @@ class LaunchesViewModel(private val launchesRepository: LaunchesRepository) : Vi
 
     fun requestLaunches(start: Int, count: Int) {
         val items = launchesLiveData.value ?: mutableListOf()
-        if (start > items.size) {
-            throw IllegalArgumentException("Start position is bigger than possible")
-        }
-        val numberToReplace = items.size - start
-        repeat(count) { i ->
-            if (i < numberToReplace) {
-                items[start + i] = ProgressItem
-            } else {
-                items.add(ProgressItem)
-            }
-        }
+        items.insertFromPosition(start, List(count) { ProgressItem })
         launchesLiveData.value = items
 
         disposables.add(launchesRepository.getLaunchesInRange(start, count)
@@ -41,11 +31,12 @@ class LaunchesViewModel(private val launchesRepository: LaunchesRepository) : Vi
             .subscribe({ result ->
                 if (result.isSuccess) {
                     val oldItems = launchesLiveData.value!!
-                    result.getOrNull()!!.forEachIndexed { i, newItem ->
-                        oldItems[start + i] = LaunchesDataItem(newItem)
-                    }
+                    oldItems.insertFromPosition(
+                        start,
+                        result.getOrNull()?.map { LaunchesDataItem(it) } ?: listOf()
+                    )
+                    launchesLiveData.value = oldItems
                 }
-
             }, { t ->
                 //launchesLiveData.value = LaunchesResponse(exception = t)
             }))

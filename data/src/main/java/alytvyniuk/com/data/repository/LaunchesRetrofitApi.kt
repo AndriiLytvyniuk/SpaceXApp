@@ -7,7 +7,7 @@ import retrofit2.http.Query
 
 internal interface LaunchesRetrofitApi {
 
-    @GET("v3/launches?limit=1&offset=5")
+    @GET("v3/launches")
     fun getLaunches(@Query("offset") from: Int, @Query("limit") number: Int): Single<Response<List<LaunchesResponseModel>>>
 
     @GET("v3/launches")

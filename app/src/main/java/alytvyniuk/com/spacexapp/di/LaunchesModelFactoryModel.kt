@@ -2,12 +2,13 @@ package alytvyniuk.com.spacexapp.di
 
 import alytvyniuk.com.model.LaunchesRepository
 import alytvyniuk.com.spacexapp.LaunchesModelFactory
-import dagger.Binds
 import dagger.Module
+import dagger.Provides
 
 @Module
-abstract class LaunchesModelFactoryModel {
+class LaunchesModelFactoryModel {
 
-    @Binds
-    abstract fun provideLaunchesModelFactory(launchesRepository: LaunchesRepository): LaunchesModelFactory
+    @Provides
+    fun provideLaunchesModelFactory(launchesRepository: LaunchesRepository) =
+        LaunchesModelFactory(launchesRepository)
 }

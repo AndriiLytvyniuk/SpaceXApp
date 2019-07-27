@@ -13,8 +13,9 @@ internal class LaunchesRetrofitClient(private val launchesRetrofitApi: LaunchesR
                         LaunchData(responseModel.flight_number)
                     } ?: emptyList()
                     Result.success(l)
+                } else {
+                    Result.failure<List<LaunchData>>(Throwable(t.message()))
                 }
-                Result.failure<List<LaunchData>>(Throwable(t.message()))
             }
     }
 
@@ -26,8 +27,9 @@ internal class LaunchesRetrofitClient(private val launchesRetrofitApi: LaunchesR
                         LaunchData(responseModel.flight_number)
                     } ?: emptyList()
                     Result.success(l)
+                } else {
+                    Result.failure<List<LaunchData>>(Throwable(t.message()))
                 }
-                Result.failure<List<LaunchData>>(Throwable(t.message()))
             }
     }
 }

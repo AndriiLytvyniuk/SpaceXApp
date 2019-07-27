@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import kotlinx.android.synthetic.main.list_item_launch.view.*
 import java.lang.IllegalArgumentException
 
 private const val TYPE_LAUNCH_ITEM = 0
@@ -12,20 +13,10 @@ private const val TYPE_PROGRESS = 1
 
 class LaunchesAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    private val items = ArrayList<LaunchesListItem>()
+    private var items = listOf<LaunchesListItem>()
 
-    fun insertItems(start: Int, newItems: Collection<LaunchesListItem>) {
-        if (start > items.size) {
-            throw IllegalArgumentException("Start position is bigger than possible")
-        }
-        val numberToReplace = items.size - start
-        newItems.forEachIndexed { counter, newItem ->
-            if (counter < numberToReplace) {
-                items[start + counter] = newItem
-            } else {
-                items.add(newItem)
-            }
-        }
+    fun insertItems(newItems: List<LaunchesListItem>) {
+        items = newItems
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -59,7 +50,12 @@ class LaunchesAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     }
 }
 
-private class LaunchesViewHolder(itemView: View): RecyclerView.ViewHolder(itemView)
+private class LaunchesViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
+
+    fun bind(item: LaunchesDataItem) {
+        itemView.launchName.text = item.launchData.flight_number.toString()
+    }
+}
 
 private class ProgressViewHolder(itemView: View): RecyclerView.ViewHolder(itemView)
 
