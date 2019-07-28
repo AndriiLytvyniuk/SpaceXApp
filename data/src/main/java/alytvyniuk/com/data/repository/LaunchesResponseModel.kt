@@ -117,7 +117,7 @@ internal data class OrbitParams(
     val eccentricity: Any,
     val epoch: Any,
     val inclination_deg: Any,
-    val lifespan_years: Int,
+    val lifespan_years: Float,
     val longitude: Any,
     val mean_anomaly: Any,
     val mean_motion: Any,

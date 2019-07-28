@@ -16,6 +16,8 @@ class LaunchesViewModel(private val launchesRepository: LaunchesRepository) : Vi
     var launches : List<LaunchesListItem> = emptyList()
     get() = launchesLiveData.value ?: emptyList()
 
+    var allItemsReceived = false
+
     private val disposables = CompositeDisposable()
 
     fun observe(@NonNull owner: LifecycleOwner, @NonNull observer: Observer<MutableList<LaunchesListItem>>) {
@@ -23,6 +25,9 @@ class LaunchesViewModel(private val launchesRepository: LaunchesRepository) : Vi
     }
 
     fun requestLaunches(start: Int, count: Int) {
+        if (allItemsReceived) {
+            return
+        }
         val items = launchesLiveData.value ?: mutableListOf()
         items.insertFromPosition(start, List(count) { ProgressItem })
         launchesLiveData.value = items
@@ -34,16 +39,25 @@ class LaunchesViewModel(private val launchesRepository: LaunchesRepository) : Vi
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({ result ->
                 if (result.isSuccess) {
-                    val oldItems = launchesLiveData.value!!
-                    Log.d("Andrii", "received from $start to ${start + count} size ${result.getOrNull()!!.size}" )
+                    val oldItems = launchesLiveData.value ?: mutableListOf()
+                    val newItems = result.getOrDefault(emptyList())
+                    Log.d("Andrii", "received from $start to ${start + count} size ${newItems.size}" )
                     oldItems.insertFromPosition(
                         start,
                         result.getOrNull()?.map { LaunchesDataItem(it) } ?: listOf()
                     )
+                    if (newItems.size < count) {
+                        allItemsReceived = true
+                        val before = oldItems.size
+                        repeat(count - newItems.size) {
+                            oldItems.removeAt(oldItems.size - 1)
+                        }
+                        Log.d("Andrii", "End reached $start to ${start + count} size ${newItems.size} before $before " )
+                    }
                     launchesLiveData.value = oldItems
                 }
             }, { t ->
-                //launchesLiveData.value = LaunchesResponse(exception = t)
+                Log.e("Andrii", "exception", t)
             }))
     }
 
