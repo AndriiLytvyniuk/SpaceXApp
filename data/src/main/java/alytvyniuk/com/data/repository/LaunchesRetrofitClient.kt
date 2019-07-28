@@ -10,25 +10,13 @@ internal class LaunchesRetrofitClient(private val launchesRetrofitApi: LaunchesR
             .map { t ->
                 if (t.isSuccessful) {
                     val l = t.body()?.map { responseModel ->
-                        LaunchData(responseModel.flight_number)
+                        LaunchData(
+                            responseModel.flight_number,
+                            responseModel.launch_date_unix)
                     } ?: emptyList()
                     Result.success(l)
                 } else {
                     Result.failure(Throwable(t.message()))
-                }
-            }
-    }
-
-    override fun getAllLaunches(): Single<Result<List<LaunchData>>> {
-        return launchesRetrofitApi.getAllLaunches()
-            .map { t ->
-                if (t.isSuccessful) {
-                    val l = t.body()?.map { responseModel ->
-                        LaunchData(responseModel.flight_number)
-                    } ?: emptyList()
-                    Result.success(l)
-                } else {
-                    Result.failure<List<LaunchData>>(Throwable(t.message()))
                 }
             }
     }

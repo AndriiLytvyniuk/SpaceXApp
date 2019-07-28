@@ -48,17 +48,13 @@ class LaunchesAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             is ProgressItem -> TYPE_PROGRESS
         }
     }
-}
 
-private class LaunchesViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
+    private inner class LaunchesViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
 
-    fun bind(item: LaunchesDataItem) {
-        itemView.launchName.text = item.launchData.flight_number.toString()
+        fun bind(item: LaunchesDataItem) {
+            itemView.launchName.text = item.launchData.flight_number.toString()
+        }
     }
+
+    private inner class ProgressViewHolder(itemView: View): RecyclerView.ViewHolder(itemView)
 }
-
-private class ProgressViewHolder(itemView: View): RecyclerView.ViewHolder(itemView)
-
-sealed class LaunchesListItem
-data class LaunchesDataItem(val launchData: LaunchData) : LaunchesListItem()
-object ProgressItem : LaunchesListItem()

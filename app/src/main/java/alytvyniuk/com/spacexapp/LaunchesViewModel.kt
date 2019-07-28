@@ -1,5 +1,6 @@
 package alytvyniuk.com.spacexapp
 
+import alytvyniuk.com.model.LaunchData
 import alytvyniuk.com.model.LaunchesRepository
 import android.util.Log
 import androidx.annotation.NonNull
@@ -8,6 +9,8 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
+
+private const val REQUEST_THRESHOLD = 10
 
 class LaunchesViewModel(private val launchesRepository: LaunchesRepository) : ViewModel() {
 
@@ -24,15 +27,17 @@ class LaunchesViewModel(private val launchesRepository: LaunchesRepository) : Vi
         launchesLiveData.observe(owner, observer)
     }
 
-    fun requestLaunches(start: Int, count: Int) {
+    fun requestMoreLaunches() {
         if (allItemsReceived) {
             return
         }
         val items = launchesLiveData.value ?: mutableListOf()
+        val start = launches.size
+        val count = REQUEST_THRESHOLD
         items.insertFromPosition(start, List(count) { ProgressItem })
         launchesLiveData.value = items
 
-        Log.d("Andrii", "requestLaunches from $start to ${start + count}")
+        Log.d("Andrii", "requestMoreLaunches from $start to ${start + count}")
 
         disposables.add(launchesRepository.getLaunchesInRange(start, count)
             .subscribeOn(Schedulers.io())
@@ -77,3 +82,7 @@ class LaunchesModelFactory @Inject constructor(
         return LaunchesViewModel(launchesRepository) as T
     }
 }
+
+sealed class LaunchesListItem
+data class LaunchesDataItem(val launchData: LaunchData) : LaunchesListItem()
+object ProgressItem : LaunchesListItem()

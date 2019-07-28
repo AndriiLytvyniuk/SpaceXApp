@@ -12,9 +12,8 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.fragment_launches.*
+import java.util.*
 import javax.inject.Inject
-
-private const val REQUEST_THRESHOLD = 10
 
 class LaunchesFragment: Fragment() {
 
@@ -23,22 +22,26 @@ class LaunchesFragment: Fragment() {
 
     private lateinit var viewModel: LaunchesViewModel
 
-    init {
-        App.component().inject(this)
-    }
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+        Log.d("Andrii", "onCreateView")
         return inflater.inflate(R.layout.fragment_launches, container, false)
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        val context = view.context
-        val adapter = LaunchesAdapter()
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        App.component().inject(this)
         viewModel = ViewModelProviders.of(
             this,
             launchesModelFactory
         ).get(LaunchesViewModel::class.java)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        Log.d("Andrii", "onViewCreated")
+        val context = view.context
+        val adapter = LaunchesAdapter()
+
         launchesRecyclerView.apply {
             val layoutManager = LinearLayoutManager(context)
             this.layoutManager = layoutManager
@@ -53,25 +56,37 @@ class LaunchesFragment: Fragment() {
                     val lastPosition = layoutManager.findLastCompletelyVisibleItemPosition()
                     //Log.d("Andrii", "onScrollStateChanged ${layoutManager.findLastCompletelyVisibleItemPosition()}")
                     if (lastPosition > viewModel.launches.size - 3) {
-                        requestMoreItems()
+                        viewModel.requestMoreLaunches()
                     }
                 }
             })
         }
 
         viewModel.observe(this, Observer { launches ->
-            adapter.insertItems(launches)
-            adapter.notifyDataSetChanged()
+            launchesRecyclerView.post {
+                adapter.insertItems(launches)
+                adapter.notifyDataSetChanged()
+                getLaunchesPerMonth(launches)
+            }
+
         })
         if (viewModel.launches.isEmpty()) {
-            requestMoreItems()
+            viewModel.requestMoreLaunches()
         }
     }
 
-    private fun requestMoreItems() {
-        val start = viewModel.launches.size
-        viewModel.requestLaunches(start, REQUEST_THRESHOLD)
+    private fun getLaunchesPerMonth(launchesListItems: List<LaunchesListItem>) {
+        val lpm = launchesListItems
+            .asSequence()
+            .takeWhile { it is LaunchesDataItem }
+            .groupingBy {
+                val date = ((it as LaunchesDataItem).launchData.launchDate).toLong() * 1000
+                val c = Calendar.getInstance()
+                c.time = Date(date)
+                c.get(Calendar.YEAR) * 100 + c.get(Calendar.MONTH)
+            }
+            .eachCount()
+        Log.d("Andrii", "lpm = $lpm")
     }
-
 
 }
