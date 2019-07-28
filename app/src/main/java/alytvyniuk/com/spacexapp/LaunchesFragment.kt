@@ -66,27 +66,12 @@ class LaunchesFragment: Fragment() {
             launchesRecyclerView.post {
                 adapter.insertItems(launches)
                 adapter.notifyDataSetChanged()
-                getLaunchesPerMonth(launches)
             }
 
         })
         if (viewModel.launches.isEmpty()) {
             viewModel.requestMoreLaunches()
         }
-    }
-
-    private fun getLaunchesPerMonth(launchesListItems: List<LaunchesListItem>) {
-        val lpm = launchesListItems
-            .asSequence()
-            .takeWhile { it is LaunchesDataItem }
-            .groupingBy {
-                val date = ((it as LaunchesDataItem).launchData.launchDate).toLong() * 1000
-                val c = Calendar.getInstance()
-                c.time = Date(date)
-                c.get(Calendar.YEAR) * 100 + c.get(Calendar.MONTH)
-            }
-            .eachCount()
-        Log.d("Andrii", "lpm = $lpm")
     }
 
 }

@@ -3,10 +3,10 @@
              android:layout_width="match_parent"
              android:layout_height="match_parent">
 
-    <TextView
-            android:layout_gravity="center"
-            android:text="@string/statistics"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+    <androidx.recyclerview.widget.RecyclerView
+            android:padding="8dp"
+            android:id="@+id/statisticsRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
 
 </FrameLayout>
