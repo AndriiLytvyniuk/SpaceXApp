@@ -1,5 +1,6 @@
 package alytvyniuk.com.spacexapp
 
+import android.graphics.Rect
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -45,9 +46,7 @@ class LaunchesFragment: Fragment() {
         launchesRecyclerView.apply {
             val layoutManager = LinearLayoutManager(context)
             this.layoutManager = layoutManager
-            this.addItemDecoration(DividerItemDecoration(context, layoutManager.orientation).apply {
-                setDrawable(context.getDrawable(R.drawable.list_separator_decoration)!!)
-            })
+            this.addItemDecoration(SpaceItemDecoration(resources.getDimensionPixelSize(R.dimen.recycler_separator_height)))
             this.adapter = adapter
             addOnScrollListener(object : RecyclerView.OnScrollListener() {
 
@@ -74,4 +73,10 @@ class LaunchesFragment: Fragment() {
         }
     }
 
+    private class SpaceItemDecoration(private val spaceSize: Int): RecyclerView.ItemDecoration() {
+        override fun getItemOffsets(outRect: Rect, view: View, parent: RecyclerView, state: RecyclerView.State) {
+            outRect.bottom = spaceSize
+            outRect.right = spaceSize
+        }
+    }
 }

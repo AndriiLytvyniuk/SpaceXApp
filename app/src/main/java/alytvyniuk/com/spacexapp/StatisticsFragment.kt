@@ -46,9 +46,6 @@ class StatisticsFragment: Fragment() {
         statisticsRecyclerView.apply {
             val layoutManager = LinearLayoutManager(context, RecyclerView.HORIZONTAL, false)
             this.layoutManager = layoutManager
-            this.addItemDecoration(DividerItemDecoration(context, layoutManager.orientation).apply {
-                setDrawable(context.getDrawable(R.drawable.list_separator_decoration)!!)
-            })
             this.adapter = adapter
             addOnScrollListener(object : RecyclerView.OnScrollListener() {
 
