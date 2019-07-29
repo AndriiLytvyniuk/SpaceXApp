@@ -1,5 +1,6 @@
-package alytvyniuk.com.spacexapp
+package alytvyniuk.com.spacexapp.statistics
 
+import alytvyniuk.com.spacexapp.*
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -8,7 +9,6 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.fragment_statistics.*
@@ -94,7 +94,13 @@ class StatisticsFragment: Fragment() {
             val launchesNumber = launchesPerMonth.remove(iterator) ?: 0
             val month = iterator % 100
             //Log.d("Andrii", "yearMonth $iterator")
-            statisticsList.add(StatisticsItem(launchesNumber, iterator / 100, month))
+            statisticsList.add(
+                StatisticsItem(
+                    launchesNumber,
+                    iterator / 100,
+                    month
+                )
+            )
             if (month >= 12) {
                 iterator = (iterator / 100 + 1) * 100 + 1
             } else {

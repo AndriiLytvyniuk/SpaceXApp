@@ -1,6 +1,9 @@
-package alytvyniuk.com.spacexapp
+package alytvyniuk.com.spacexapp.launchlist
 
-import alytvyniuk.com.model.LaunchData
+import alytvyniuk.com.spacexapp.LaunchesDataItem
+import alytvyniuk.com.spacexapp.LaunchesListItem
+import alytvyniuk.com.spacexapp.ProgressItem
+import alytvyniuk.com.spacexapp.R
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup

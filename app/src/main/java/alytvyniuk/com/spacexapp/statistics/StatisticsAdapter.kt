@@ -1,5 +1,6 @@
-package alytvyniuk.com.spacexapp
+package alytvyniuk.com.spacexapp.statistics
 
+import alytvyniuk.com.spacexapp.R
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -26,10 +27,12 @@ class StatisticsAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         return when(viewType) {
             TYPE_STATISTICS_ITEM ->
                 StatisticsViewHolder(
-                    inflater.inflate(R.layout.list_item_statistics_graph, parent, false))
+                    inflater.inflate(R.layout.list_item_statistics_graph, parent, false)
+                )
             TYPE_PROGRESS ->
                 StatisticsProgressViewHolder(
-                    inflater.inflate(R.layout.list_item_statistics_loading, parent, false))
+                    inflater.inflate(R.layout.list_item_statistics_loading, parent, false)
+                )
             else -> throw IllegalArgumentException("Unknown type")
         }
     }
@@ -55,8 +58,8 @@ class StatisticsAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private class StatisticsViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
 
         fun bind(item: StatisticsItem) {
-            itemView.month.text = "${dateFormatSymbols.months[item.month - 1]}"
-            itemView.year.text = "${item.year}"
+//            itemView.month.text = "${dateFormatSymbols.months[item.month - 1]}"
+//            itemView.year.text = "${item.year}"
         }
     }
 

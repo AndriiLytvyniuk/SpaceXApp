@@ -2,8 +2,8 @@ package alytvyniuk.com.spacexapp.di
 
 import alytvyniuk.com.data.repository.di.AppContextModule
 import alytvyniuk.com.data.repository.di.RepositoriesModule
-import alytvyniuk.com.spacexapp.LaunchesFragment
-import alytvyniuk.com.spacexapp.StatisticsFragment
+import alytvyniuk.com.spacexapp.launchlist.LaunchesFragment
+import alytvyniuk.com.spacexapp.statistics.StatisticsFragment
 import dagger.Component
 import javax.inject.Singleton
 

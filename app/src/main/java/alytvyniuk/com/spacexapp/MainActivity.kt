@@ -1,5 +1,7 @@
 package alytvyniuk.com.spacexapp
 
+import alytvyniuk.com.spacexapp.launchlist.LaunchesFragment
+import alytvyniuk.com.spacexapp.statistics.StatisticsFragment
 import android.content.Context
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity

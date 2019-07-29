@@ -1,5 +1,9 @@
-package alytvyniuk.com.spacexapp
+package alytvyniuk.com.spacexapp.launchlist
 
+import alytvyniuk.com.spacexapp.App
+import alytvyniuk.com.spacexapp.LaunchesModelFactory
+import alytvyniuk.com.spacexapp.LaunchesViewModel
+import alytvyniuk.com.spacexapp.R
 import android.graphics.Rect
 import android.os.Bundle
 import android.util.Log
@@ -9,11 +13,9 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.fragment_launches.*
-import java.util.*
 import javax.inject.Inject
 
 class LaunchesFragment: Fragment() {
@@ -46,7 +48,13 @@ class LaunchesFragment: Fragment() {
         launchesRecyclerView.apply {
             val layoutManager = LinearLayoutManager(context)
             this.layoutManager = layoutManager
-            this.addItemDecoration(SpaceItemDecoration(resources.getDimensionPixelSize(R.dimen.recycler_separator_height)))
+            this.addItemDecoration(
+                SpaceItemDecoration(
+                    resources.getDimensionPixelSize(
+                        R.dimen.recycler_separator_height
+                    )
+                )
+            )
             this.adapter = adapter
             addOnScrollListener(object : RecyclerView.OnScrollListener() {
 
