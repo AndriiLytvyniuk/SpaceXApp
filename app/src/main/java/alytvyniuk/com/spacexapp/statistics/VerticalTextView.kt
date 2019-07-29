@@ -5,20 +5,16 @@ import android.graphics.Canvas
 import android.util.AttributeSet
 import android.view.Gravity
 import android.widget.TextView
-import android.text.TextPaint
 
 
 class VerticalTextView(context: Context, attrs: AttributeSet) : TextView(context, attrs) {
-    internal val topDown: Boolean
 
-    init {
-        val gravity = gravity
+    private val topDown: Boolean =
         if (Gravity.isVertical(gravity) && gravity and Gravity.VERTICAL_GRAVITY_MASK == Gravity.BOTTOM) {
-            setGravity(gravity and Gravity.HORIZONTAL_GRAVITY_MASK or Gravity.TOP)
-            topDown = false
+            gravity = gravity and Gravity.HORIZONTAL_GRAVITY_MASK or Gravity.TOP
+            false
         } else
-            topDown = true
-    }
+            true
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         super.onMeasure(heightMeasureSpec, widthMeasureSpec)

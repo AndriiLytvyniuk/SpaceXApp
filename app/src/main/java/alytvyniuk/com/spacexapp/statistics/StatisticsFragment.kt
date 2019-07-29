@@ -60,10 +60,16 @@ class StatisticsFragment: Fragment() {
             })
         }
 
-        viewModel.observe(this, Observer { launches ->
+        viewModel.observeLaunches(this, Observer { launches ->
             statisticsRecyclerView.post {
                 val items = getLaunchesPerMonth(launches)
                 adapter.insertItems(items)
+                adapter.notifyDataSetChanged()
+            }
+        })
+        viewModel.observeAllLaunchesReceived(this, Observer { allLaunchesReceivedLiveData ->
+            statisticsRecyclerView.post {
+                adapter.allItemsReceived = allLaunchesReceivedLiveData
                 adapter.notifyDataSetChanged()
             }
         })
@@ -72,12 +78,10 @@ class StatisticsFragment: Fragment() {
         }
     }
 
-    private fun getLaunchesPerMonth(launchesListItems: List<LaunchesListItem>): List<StatisticsItem> {
+    private fun getLaunchesPerMonth(launchesListItems: List<LaunchesDataItem>): List<StatisticsItem> {
         val launchesPerMonth = launchesListItems
-            .asSequence()
-            .takeWhile { it is LaunchesDataItem }
             .groupingBy {
-                val date = ((it as LaunchesDataItem).launchData.launchDate).toLong() * 1000
+                val date = it.launchData.launchDate.toLong() * 1000
                 val c = Calendar.getInstance()
                 c.time = Date(date)
                 c.get(Calendar.YEAR) * 100 + c.get(Calendar.MONTH) + 1

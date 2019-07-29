@@ -69,7 +69,7 @@ class LaunchesFragment: Fragment() {
             })
         }
 
-        viewModel.observe(this, Observer { launches ->
+        viewModel.observeLaunches(this, Observer { launches ->
             launchesRecyclerView.post {
                 adapter.insertItems(launches)
                 adapter.notifyDataSetChanged()

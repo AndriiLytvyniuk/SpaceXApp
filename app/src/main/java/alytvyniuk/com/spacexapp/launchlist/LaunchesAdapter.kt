@@ -1,8 +1,6 @@
 package alytvyniuk.com.spacexapp.launchlist
 
 import alytvyniuk.com.spacexapp.LaunchesDataItem
-import alytvyniuk.com.spacexapp.LaunchesListItem
-import alytvyniuk.com.spacexapp.ProgressItem
 import alytvyniuk.com.spacexapp.R
 import android.view.LayoutInflater
 import android.view.View
@@ -16,9 +14,11 @@ private const val TYPE_PROGRESS = 1
 
 class LaunchesAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    private var items = listOf<LaunchesListItem>()
+    private var items = listOf<LaunchesDataItem>()
 
-    fun insertItems(newItems: List<LaunchesListItem>) {
+    var allItemsReceived = false
+
+    fun insertItems(newItems: List<LaunchesDataItem>) {
         items = newItems
     }
 
@@ -35,20 +35,21 @@ class LaunchesAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         }
     }
 
-    override fun getItemCount() = items.size
+    override fun getItemCount() = if (allItemsReceived) items.size else items.size + 1
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (holder) {
             is LaunchesViewHolder -> {
-                holder.bind(items[position] as LaunchesDataItem)
+                holder.bind(items[position])
             }
         }
     }
 
     override fun getItemViewType(position: Int): Int {
-        return when (items[position]) {
-            is LaunchesDataItem -> TYPE_LAUNCH_ITEM
-            is ProgressItem -> TYPE_PROGRESS
+        return if (!allItemsReceived && position == items.size) {
+            TYPE_PROGRESS
+        } else {
+            TYPE_LAUNCH_ITEM
         }
     }
 

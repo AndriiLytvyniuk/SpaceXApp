@@ -14,28 +14,30 @@ private const val REQUEST_THRESHOLD = 10
 
 class LaunchesViewModel(private val launchesRepository: LaunchesRepository) : ViewModel() {
 
-    private val launchesLiveData = MutableLiveData<MutableList<LaunchesListItem>>().apply { this.value = mutableListOf() }
+    private val launchesLiveData = MutableLiveData<MutableList<LaunchesDataItem>>().apply { this.value = mutableListOf() }
 
-    var launches : List<LaunchesListItem> = emptyList()
+    private val allLaunchesReceivedLiveData = MutableLiveData<Boolean>()
+
+    var launches : List<LaunchesDataItem> = emptyList()
     get() = launchesLiveData.value ?: emptyList()
-
-    var allItemsReceived = false
 
     private val disposables = CompositeDisposable()
 
-    fun observe(@NonNull owner: LifecycleOwner, @NonNull observer: Observer<MutableList<LaunchesListItem>>) {
+    fun observeLaunches(@NonNull owner: LifecycleOwner, @NonNull observer: Observer<MutableList<LaunchesDataItem>>) {
         launchesLiveData.observe(owner, observer)
     }
 
+    fun observeAllLaunchesReceived(@NonNull owner: LifecycleOwner, @NonNull observer: Observer<Boolean>) {
+        allLaunchesReceivedLiveData.observe(owner, observer)
+    }
+
     fun requestMoreLaunches() {
-        if (allItemsReceived) {
+        if (allLaunchesReceivedLiveData.value == true) {
             return
         }
         val items = launchesLiveData.value ?: mutableListOf()
-        val start = launches.size
+        val start = items.size
         val count = REQUEST_THRESHOLD
-        items.insertFromPosition(start, List(count) { ProgressItem })
-        launchesLiveData.value = items
 
         Log.d("Andrii", "requestMoreLaunches from $start to ${start + count}")
 
@@ -47,17 +49,10 @@ class LaunchesViewModel(private val launchesRepository: LaunchesRepository) : Vi
                     val oldItems = launchesLiveData.value ?: mutableListOf()
                     val newItems = result.getOrDefault(emptyList())
                     Log.d("Andrii", "received from $start to ${start + count} size ${newItems.size}" )
-                    oldItems.insertFromPosition(
-                        start,
-                        result.getOrNull()?.map { LaunchesDataItem(it) } ?: listOf()
-                    )
+                    oldItems.addAll(result.getOrNull()?.map { LaunchesDataItem(it) } ?: listOf())
                     if (newItems.size < count) {
-                        allItemsReceived = true
-                        val before = oldItems.size
-                        repeat(count - newItems.size) {
-                            oldItems.removeAt(oldItems.size - 1)
-                        }
-                        Log.d("Andrii", "End reached $start to ${start + count} size ${newItems.size} before $before " )
+                        allLaunchesReceivedLiveData.value = true
+                        Log.d("Andrii", "End reached $start to ${start + count} size ${newItems.size}" )
                     }
                     launchesLiveData.value = oldItems
                 }
@@ -70,7 +65,6 @@ class LaunchesViewModel(private val launchesRepository: LaunchesRepository) : Vi
         super.onCleared()
         disposables.clear()
     }
-
 }
 
 class LaunchesModelFactory @Inject constructor(
@@ -83,6 +77,4 @@ class LaunchesModelFactory @Inject constructor(
     }
 }
 
-sealed class LaunchesListItem
-data class LaunchesDataItem(val launchData: LaunchData) : LaunchesListItem()
-object ProgressItem : LaunchesListItem()
+data class LaunchesDataItem(val launchData: LaunchData)
