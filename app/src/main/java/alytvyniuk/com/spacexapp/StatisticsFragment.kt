@@ -64,16 +64,18 @@ class StatisticsFragment: Fragment() {
         }
 
         viewModel.observe(this, Observer { launches ->
-
-
-
+            statisticsRecyclerView.post {
+                val items = getLaunchesPerMonth(launches)
+                adapter.insertItems(items)
+                adapter.notifyDataSetChanged()
+            }
         })
         if (viewModel.launches.isEmpty()) {
             viewModel.requestMoreLaunches()
         }
     }
 
-    private fun getLaunchesPerMonth(launchesListItems: List<LaunchesListItem>) {
+    private fun getLaunchesPerMonth(launchesListItems: List<LaunchesListItem>): List<StatisticsItem> {
         val launchesPerMonth = launchesListItems
             .asSequence()
             .takeWhile { it is LaunchesDataItem }
@@ -81,18 +83,28 @@ class StatisticsFragment: Fragment() {
                 val date = ((it as LaunchesDataItem).launchData.launchDate).toLong() * 1000
                 val c = Calendar.getInstance()
                 c.time = Date(date)
-                c.get(Calendar.YEAR) * 100 + c.get(Calendar.MONTH)
+                c.get(Calendar.YEAR) * 100 + c.get(Calendar.MONTH) + 1
             }
             .eachCount()
+            .toMutableMap()
 
-        val min = launchesPerMonth.minBy { it.key } ?: return
-        val startYear = min.key / 100
-        val startMonth = min.key % 100
-
-        val firstItem = StatisticsItem()
-
+        //Log.d("Andrii", "getLaunchesPerMonth1 $launchesPerMonth")
         val statisticsList = mutableListOf<StatisticsItem>()
-        statisticsList.add(launchesPerMonth.g)
 
+        val min = launchesPerMonth.minBy { it.key } ?: return statisticsList
+        var iterator = min.key
+        while(launchesPerMonth.isNotEmpty()) {
+            val launchesNumber = launchesPerMonth.remove(iterator) ?: 0
+            val month = iterator % 100
+            //Log.d("Andrii", "yearMonth $iterator")
+            statisticsList.add(StatisticsItem(launchesNumber, iterator / 100, month))
+            if (month >= 12) {
+                iterator = (iterator / 100 + 1) * 100 + 1
+            } else {
+                iterator++
+            }
+        }
+        //Log.d("Andrii", "getLaunchesPerMonth2 ${statisticsList.size} ${statisticsList[statisticsList.size -1].year} ${statisticsList[statisticsList.size -1].month}")
+        return statisticsList
     }
 }

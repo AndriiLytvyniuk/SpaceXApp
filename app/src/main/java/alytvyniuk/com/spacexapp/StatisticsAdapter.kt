@@ -5,10 +5,11 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.list_item_statistics_graph.view.*
-import java.time.YearMonth
+import java.text.DateFormatSymbols
 
 private const val TYPE_STATISTICS_ITEM = 0
 private const val TYPE_PROGRESS = 1
+private val dateFormatSymbols = DateFormatSymbols()
 
 class StatisticsAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
@@ -54,7 +55,8 @@ class StatisticsAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private class StatisticsViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
 
         fun bind(item: StatisticsItem) {
-            itemView.month.text = item.yearMonth.toString()
+            itemView.month.text = "${dateFormatSymbols.months[item.month - 1]}"
+            itemView.year.text = "${item.year}"
         }
     }
 
@@ -63,4 +65,5 @@ class StatisticsAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
 data class StatisticsItem(
     val launchesNumber: Int,
-    val yearMonth: YearMonth)
+    val year: Int,
+    val month: Int)
