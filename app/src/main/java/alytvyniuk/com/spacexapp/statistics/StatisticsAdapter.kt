@@ -1,38 +1,40 @@
 package alytvyniuk.com.spacexapp.statistics
 
 import alytvyniuk.com.spacexapp.R
+import alytvyniuk.com.spacexapp.inflate
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.list_item_statistics_graph.view.*
 import java.text.DateFormatSymbols
+import kotlin.math.max
 
 private const val TYPE_STATISTICS_ITEM = 0
-private const val TYPE_PROGRESS = 1
+private const val TYPE_EMPTY = 1
+private const val TYPE_PROGRESS = 2
 private val dateFormatSymbols = DateFormatSymbols()
 
 class StatisticsAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private var items = listOf<StatisticsItem>()
+    private var maxLaunches = 0
 
     var allItemsReceived = false
 
     fun insertItems(newItems: List<StatisticsItem>) {
         items = newItems
+        maxLaunches = items.maxBy {it.launchesNumber}?.launchesNumber ?: 0
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        val inflater = LayoutInflater.from(parent.context)
         return when(viewType) {
             TYPE_STATISTICS_ITEM ->
-                StatisticsViewHolder(
-                    inflater.inflate(R.layout.list_item_statistics_graph, parent, false)
-                )
+                StatisticsViewHolder(parent.inflate(R.layout.list_item_statistics_graph))
             TYPE_PROGRESS ->
-                StatisticsProgressViewHolder(
-                    inflater.inflate(R.layout.list_item_statistics_loading, parent, false)
-                )
+                StatisticsProgressViewHolder(parent.inflate(R.layout.list_item_statistics_loading))
+            TYPE_EMPTY ->
+                StatisticsEmptyViewHolder(parent.inflate(R.layout.list_item_statistics_empty))
             else -> throw IllegalArgumentException("Unknown type")
         }
     }
@@ -50,20 +52,32 @@ class StatisticsAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     override fun getItemViewType(position: Int): Int {
         return if (!allItemsReceived && position == items.size) {
             TYPE_PROGRESS
-        } else {
+        } else if (items[position].launchesNumber > 0) {
             TYPE_STATISTICS_ITEM
+        } else {
+            TYPE_EMPTY
         }
     }
 
-    private class StatisticsViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
+    private inner class StatisticsViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
+
+        init{
+            itemView.setOnClickListener {
+                itemView.launchesNumberText.visibility = View.VISIBLE
+            }
+        }
 
         fun bind(item: StatisticsItem) {
-//            itemView.month.text = "${dateFormatSymbols.months[item.month - 1]}"
-//            itemView.year.text = "${item.year}"
+            itemView.dateText.text = "${dateFormatSymbols.months[item.month - 1]} ${item.year}"
+            itemView.launchesNumberText.text = item.launchesNumber.toString()
+            itemView.launchesNumberText.visibility = View.INVISIBLE
+            itemView.graphView.layoutParams.height = (itemView.height.toDouble() * 0.7 * item.launchesNumber / maxLaunches).toInt()
+            itemView.requestLayout()
         }
     }
 
     private class StatisticsProgressViewHolder(itemView: View): RecyclerView.ViewHolder(itemView)
+    private class StatisticsEmptyViewHolder(itemView: View): RecyclerView.ViewHolder(itemView)
 }
 
 data class StatisticsItem(

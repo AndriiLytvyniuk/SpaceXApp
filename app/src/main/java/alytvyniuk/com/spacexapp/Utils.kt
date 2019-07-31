@@ -1,6 +1,10 @@
 package alytvyniuk.com.spacexapp
 
- fun <T> MutableList<T>.insertFromPosition(start: Int, listToMerge: List<T>) {
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+
+fun <T> MutableList<T>.insertFromPosition(start: Int, listToMerge: List<T>) {
     if (start > size) {
         throw IllegalArgumentException("Start position is bigger than possible")
     }
@@ -13,3 +17,6 @@ package alytvyniuk.com.spacexapp
         }
     }
 }
+
+fun ViewGroup.inflate(resource: Int, attachToRoot: Boolean = false): View =
+    LayoutInflater.from(context).inflate(resource, this, attachToRoot)
