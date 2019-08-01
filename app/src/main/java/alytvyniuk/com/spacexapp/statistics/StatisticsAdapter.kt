@@ -2,13 +2,12 @@ package alytvyniuk.com.spacexapp.statistics
 
 import alytvyniuk.com.spacexapp.R
 import alytvyniuk.com.spacexapp.inflate
-import android.view.LayoutInflater
+import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.list_item_statistics_graph.view.*
 import java.text.DateFormatSymbols
-import kotlin.math.max
 
 private const val TYPE_STATISTICS_ITEM = 0
 private const val TYPE_EMPTY = 1
@@ -30,7 +29,7 @@ class StatisticsAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when(viewType) {
             TYPE_STATISTICS_ITEM ->
-                StatisticsViewHolder(parent.inflate(R.layout.list_item_statistics_graph))
+                StatisticsViewHolder(parent.inflate(R.layout.list_item_statistics_graph), parent.measuredHeight)
             TYPE_PROGRESS ->
                 StatisticsProgressViewHolder(parent.inflate(R.layout.list_item_statistics_loading))
             TYPE_EMPTY ->
@@ -59,7 +58,7 @@ class StatisticsAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         }
     }
 
-    private inner class StatisticsViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
+    private inner class StatisticsViewHolder(itemView: View, private val parentHeight: Int): RecyclerView.ViewHolder(itemView) {
 
         init{
             itemView.setOnClickListener {
@@ -68,11 +67,13 @@ class StatisticsAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         }
 
         fun bind(item: StatisticsItem) {
-            itemView.dateText.text = "${dateFormatSymbols.months[item.month - 1]} ${item.year}"
+            itemView.dateText.text = "${dateFormatSymbols.shortMonths[item.month - 1]} ${item.year}"
             itemView.launchesNumberText.text = item.launchesNumber.toString()
             itemView.launchesNumberText.visibility = View.INVISIBLE
-            itemView.graphView.layoutParams.height = (itemView.height.toDouble() * 0.7 * item.launchesNumber / maxLaunches).toInt()
-            itemView.requestLayout()
+            val height = parentHeight.toDouble() * 0.7 * item.launchesNumber / maxLaunches
+            itemView.graphView.layoutParams.height = height.toInt()
+            Log.d("Andrii", "height = ${height}")
+            itemView.graphView.invalidate()
         }
     }
 
