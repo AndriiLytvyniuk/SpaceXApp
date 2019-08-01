@@ -62,21 +62,22 @@ class LaunchesFragment: Fragment() {
                     super.onScrolled(recyclerView, dx, dy)
                     val lastPosition = layoutManager.findLastCompletelyVisibleItemPosition()
                     //Log.d("Andrii", "onScrollStateChanged ${layoutManager.findLastCompletelyVisibleItemPosition()}")
-                    if (lastPosition > viewModel.launches.size - 3) {
+                    if (lastPosition > (viewModel.launchesLiveData.value?.size ?: 0) - 3) {
                         viewModel.requestMoreLaunches()
                     }
                 }
             })
         }
 
-        viewModel.observe(this, Observer { launches ->
+        viewModel.launchesLiveData.observe(this, Observer { launches ->
             launchesRecyclerView.post {
                 adapter.insertItems(launches)
                 adapter.notifyDataSetChanged()
             }
 
         })
-        if (viewModel.launches.isEmpty()) {
+
+        if (viewModel.launchesLiveData.value.isNullOrEmpty()) {
             viewModel.requestMoreLaunches()
         }
     }

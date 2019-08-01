@@ -52,21 +52,24 @@ class StatisticsFragment: Fragment() {
                     super.onScrolled(recyclerView, dx, dy)
                     val lastPosition = layoutManager.findLastCompletelyVisibleItemPosition()
                     //Log.d("Andrii", "onScrollStateChanged ${layoutManager.findLastCompletelyVisibleItemPosition()}")
-                    if (lastPosition > viewModel.launches.size - 3) {
+                    if (lastPosition > (recyclerView.adapter?.itemCount ?: 0) - 5) {
                         viewModel.requestMoreLaunches()
                     }
                 }
             })
         }
 
-        viewModel.observe(this, Observer { launches ->
+        viewModel.launchesLiveData.observe(this, Observer { launches ->
             statisticsRecyclerView.post {
                 val items = getLaunchesPerMonth(launches)
                 adapter.insertItems(items)
                 adapter.notifyDataSetChanged()
             }
         })
-        if (viewModel.launches.isEmpty()) {
+        viewModel.allItemsReceived.observe(this, Observer {
+            adapter.allItemsReceived = it
+        })
+        if (viewModel.launchesLiveData.value.isNullOrEmpty()) {
             viewModel.requestMoreLaunches()
         }
     }
