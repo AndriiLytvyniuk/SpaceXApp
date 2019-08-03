@@ -1,18 +1,24 @@
 package alytvyniuk.com.spacexapp.launchlist
 
+import alytvyniuk.com.model.LaunchData
 import alytvyniuk.com.spacexapp.LaunchesDataItem
 import alytvyniuk.com.spacexapp.LaunchesListItem
 import alytvyniuk.com.spacexapp.ProgressItem
 import alytvyniuk.com.spacexapp.R
+import android.graphics.drawable.ColorDrawable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.list_item_launch.view.*
 import java.lang.IllegalArgumentException
+import java.text.SimpleDateFormat
+import java.util.*
 
 private const val TYPE_LAUNCH_ITEM = 0
 private const val TYPE_PROGRESS = 1
+private val DATE_FORMAT = SimpleDateFormat("MMM dd, yyyy")
 
 class LaunchesAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
@@ -55,9 +61,26 @@ class LaunchesAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private inner class LaunchesViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
 
         fun bind(item: LaunchesDataItem) {
-            itemView.launchName.text = item.launchData.flight_number.toString()
+            item.launchData.apply {
+                itemView.missionName.text = missionName
+                itemView.rocketName.text = rocketName
+                itemView.missionDate.text = DATE_FORMAT.format(Date(missionDate))
+                itemView.launchesLayout.background = getCardBackground(this)
+            }
         }
+
+        private fun getCardBackground(launchData: LaunchData) = ColorDrawable(
+            ContextCompat.getColor(
+                itemView.context,
+                when {
+                    launchData.isUpcoming -> R.color.upcoming_launch
+                    launchData.isSuccess == true -> R.color.successful_launch
+                    else -> R.color.failed_launch
+                }
+            )
+        )
     }
+
 
     private inner class ProgressViewHolder(itemView: View): RecyclerView.ViewHolder(itemView)
 }

@@ -79,7 +79,7 @@ class StatisticsFragment: Fragment() {
             .asSequence()
             .takeWhile { it is LaunchesDataItem }
             .groupingBy {
-                val date = ((it as LaunchesDataItem).launchData.launchDate).toLong() * 1000
+                val date = ((it as LaunchesDataItem).launchData.missionDate).toLong() * 1000
                 val c = Calendar.getInstance()
                 c.time = Date(date)
                 c.get(Calendar.YEAR) * 100 + c.get(Calendar.MONTH) + 1
