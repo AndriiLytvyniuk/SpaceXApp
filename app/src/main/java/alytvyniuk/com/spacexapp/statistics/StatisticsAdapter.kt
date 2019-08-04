@@ -2,7 +2,6 @@ package alytvyniuk.com.spacexapp.statistics
 
 import alytvyniuk.com.spacexapp.R
 import alytvyniuk.com.spacexapp.inflate
-import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView

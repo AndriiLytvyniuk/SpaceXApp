@@ -67,7 +67,6 @@ class LaunchesFragment: Fragment() {
                 adapter.insertItems(launches)
                 adapter.notifyDataSetChanged()
             }
-
         })
     }
 

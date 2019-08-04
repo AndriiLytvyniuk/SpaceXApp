@@ -2,5 +2,7 @@
     <string name="app_name">SpaceXApp</string>
     <string name="launches">Launches</string>
     <string name="statistics">Statistics</string>
+    <string name="rocket_name">Rocket name: %1$s</string>
+    <string name="launch_date">Launch Date: %1$s</string>
 
 </resources>

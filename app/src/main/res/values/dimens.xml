@@ -1,8 +1,12 @@
 <resources>
     <dimen name="fab_margin">16dp</dimen>
-    <dimen name="launches_item_height">200dp</dimen>
+    <dimen name="launches_item_height">150dp</dimen>
     <dimen name="statistics_item_width">40dp</dimen>
     <dimen name="recycler_separator_height">8dp</dimen>
     <dimen name="card_margin">8dp</dimen>
     <dimen name="launch_image_height">300dp</dimen>
+    <dimen name="card_corner_radius">5dp</dimen>
+    <dimen name="card_elevation">3dp</dimen>
+    <dimen name="text_large">18sp</dimen>
+    <dimen name="text_medium">16sp</dimen>
 </resources>

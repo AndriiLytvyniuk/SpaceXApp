@@ -77,11 +77,15 @@ class LaunchesAdapter(private val imageLoader: ImageLoader): RecyclerView.Adapte
         }
 
         fun bind(item: LaunchesDataItem) {
+            val context = itemView.context
             item.launchData.apply {
                 itemView.missionName.text = missionName
-                itemView.rocketName.text = rocketName
-                itemView.missionDate.text = DATE_FORMAT.format(Date(missionDate))
-                itemView.launchesLayout.background = getCardBackground(this)
+                itemView.rocketName.text = context.getString(R.string.rocket_name, rocketName)
+                itemView.missionDate.text = context.getString(
+                    R.string.launch_date,
+                    DATE_FORMAT.format(Date(missionDate))
+                )
+                itemView.colorFrame.background = getCardBackground(this)
                 missionImage.let {
                     if (it != null) {
                         imageLoader.loadImage(it, itemView.missionImage)
