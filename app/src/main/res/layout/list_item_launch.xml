@@ -28,10 +28,11 @@
                 android:id="@+id/cardView">
 
             <ImageView
+                    android:id="@+id/missionImage"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    android:src="@mipmap/ic_launcher"/>
+                    tools:src="@mipmap/ic_launcher"/>
 
         </androidx.cardview.widget.CardView>
 

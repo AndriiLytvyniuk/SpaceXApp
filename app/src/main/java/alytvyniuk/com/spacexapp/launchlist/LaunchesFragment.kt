@@ -1,6 +1,9 @@
 package alytvyniuk.com.spacexapp.launchlist
 
-import alytvyniuk.com.spacexapp.*
+import alytvyniuk.com.spacexapp.App
+import alytvyniuk.com.spacexapp.LaunchesViewModel
+import alytvyniuk.com.spacexapp.R
+import alytvyniuk.com.spacexapp.inflate
 import android.graphics.Rect
 import android.os.Bundle
 import android.util.Log
@@ -13,12 +16,8 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.fragment_launches.*
-import javax.inject.Inject
 
 class LaunchesFragment: Fragment() {
-
-    @Inject
-    lateinit var launchesModelFactory: LaunchesModelFactory
 
     private lateinit var viewModel: LaunchesViewModel
 
@@ -27,10 +26,9 @@ class LaunchesFragment: Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        App.component().inject(this)
         viewModel = ViewModelProviders.of(
             requireActivity(),
-            launchesModelFactory
+            App.component().launchesModelFactory()
         ).get(LaunchesViewModel::class.java)
     }
 
@@ -38,7 +36,7 @@ class LaunchesFragment: Fragment() {
         super.onViewCreated(view, savedInstanceState)
         Log.d("Andrii", "onViewCreated")
         val context = view.context
-        val adapter = LaunchesAdapter()
+        val adapter = LaunchesAdapter(App.component().imageLoader())
 
         launchesRecyclerView.apply {
             val layoutManager = LinearLayoutManager(context)

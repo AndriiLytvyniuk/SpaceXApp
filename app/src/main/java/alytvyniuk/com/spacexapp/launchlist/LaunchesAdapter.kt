@@ -1,22 +1,20 @@
 package alytvyniuk.com.spacexapp.launchlist
 
+import alytvyniuk.com.model.ImageLoader
 import alytvyniuk.com.model.LaunchData
 import alytvyniuk.com.spacexapp.LaunchesDataItem
 import alytvyniuk.com.spacexapp.LaunchesListItem
 import alytvyniuk.com.spacexapp.ProgressItem
 import alytvyniuk.com.spacexapp.R
 import alytvyniuk.com.spacexapp.launchdetails.LaunchDetailsFragment
-import android.app.Activity
 import android.graphics.drawable.ColorDrawable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentActivity
-import androidx.fragment.app.FragmentTransaction
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.list_item_launch.view.*
-import java.lang.IllegalArgumentException
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -24,7 +22,7 @@ private const val TYPE_LAUNCH_ITEM = 0
 private const val TYPE_PROGRESS = 1
 private val DATE_FORMAT = SimpleDateFormat("MMM dd, yyyy", Locale.US)
 
-class LaunchesAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class LaunchesAdapter(private val imageLoader: ImageLoader): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private var items = listOf<LaunchesListItem>()
 
@@ -84,6 +82,14 @@ class LaunchesAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                 itemView.rocketName.text = rocketName
                 itemView.missionDate.text = DATE_FORMAT.format(Date(missionDate))
                 itemView.launchesLayout.background = getCardBackground(this)
+                missionImage.let {
+                    if (it != null) {
+                        imageLoader.loadImage(it, itemView.missionImage)
+                    } else {
+                        //TODO
+                    }
+                }
+
             }
         }
 
