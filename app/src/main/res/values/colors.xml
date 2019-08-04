@@ -6,4 +6,5 @@
     <color name="upcoming_launch">#0000ff</color>
     <color name="successful_launch">#00ff00</color>
     <color name="failed_launch">#ff0000</color>
+    <color name="light_gray">#ccc</color>
 </resources>

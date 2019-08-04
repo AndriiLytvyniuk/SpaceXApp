@@ -2,7 +2,7 @@ package alytvyniuk.com.data.repository
 
 internal data class LaunchesResponseModel(
     val crew: List<Any>,
-    val details: String,
+    val details: String?,
     val flight_number: Int,
     val is_tentative: Boolean,
     val launch_date_local: String,

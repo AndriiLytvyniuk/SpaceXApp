@@ -5,11 +5,15 @@ import alytvyniuk.com.spacexapp.LaunchesDataItem
 import alytvyniuk.com.spacexapp.LaunchesListItem
 import alytvyniuk.com.spacexapp.ProgressItem
 import alytvyniuk.com.spacexapp.R
+import alytvyniuk.com.spacexapp.launchdetails.LaunchDetailsFragment
+import android.app.Activity
 import android.graphics.drawable.ColorDrawable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.FragmentActivity
+import androidx.fragment.app.FragmentTransaction
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.list_item_launch.view.*
 import java.lang.IllegalArgumentException
@@ -59,6 +63,17 @@ class LaunchesAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     }
 
     private inner class LaunchesViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
+
+        init {
+            itemView.setOnClickListener {
+                (it.context as FragmentActivity)
+                    .supportFragmentManager
+                    .beginTransaction()
+                    .add(R.id.fragmentContainer, LaunchDetailsFragment(), "launch_details")
+                    .addToBackStack(null)
+                    .commit()
+            }
+        }
 
         fun bind(item: LaunchesDataItem) {
             item.launchData.apply {

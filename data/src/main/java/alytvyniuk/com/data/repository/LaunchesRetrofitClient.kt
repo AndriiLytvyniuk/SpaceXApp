@@ -17,7 +17,8 @@ internal class LaunchesRetrofitClient(private val launchesRetrofitApi: LaunchesR
                             it.launch_date_unix * 1000L,
                             it.links.mission_patch_small,
                             it.launch_success,
-                            it.upcoming)
+                            it.upcoming,
+                            it.details)
                     } ?: emptyList()
                     Result.success(l)
                 } else {

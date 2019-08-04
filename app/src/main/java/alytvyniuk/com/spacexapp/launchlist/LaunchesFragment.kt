@@ -1,9 +1,6 @@
 package alytvyniuk.com.spacexapp.launchlist
 
-import alytvyniuk.com.spacexapp.App
-import alytvyniuk.com.spacexapp.LaunchesModelFactory
-import alytvyniuk.com.spacexapp.LaunchesViewModel
-import alytvyniuk.com.spacexapp.R
+import alytvyniuk.com.spacexapp.*
 import android.graphics.Rect
 import android.os.Bundle
 import android.util.Log
@@ -25,10 +22,8 @@ class LaunchesFragment: Fragment() {
 
     private lateinit var viewModel: LaunchesViewModel
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        Log.d("Andrii", "onCreateView")
-        return inflater.inflate(R.layout.fragment_launches, container, false)
-    }
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
+        container?.inflate(R.layout.fragment_launches)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
