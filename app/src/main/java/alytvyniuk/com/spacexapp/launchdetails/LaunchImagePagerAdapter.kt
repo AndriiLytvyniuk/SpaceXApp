@@ -4,13 +4,18 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
 
-class LaunchImagePagerAdapter(fragmentManager: FragmentManager): FragmentStatePagerAdapter(fragmentManager) {
+class LaunchImagePagerAdapter(
+    fragmentManager: FragmentManager,
+    private val images: List<String>
+): FragmentStatePagerAdapter(fragmentManager) {
+
+
     override fun getItem(position: Int): Fragment {
-        return LaunchImageFragment()
+        return LaunchImageFragment().setImageUrl(images[position])
     }
 
     override fun getCount(): Int {
-        return 5
+        return images.size
     }
 
 }

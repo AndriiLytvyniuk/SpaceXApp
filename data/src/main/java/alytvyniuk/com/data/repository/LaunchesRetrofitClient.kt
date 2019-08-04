@@ -18,7 +18,8 @@ internal class LaunchesRetrofitClient(private val launchesRetrofitApi: LaunchesR
                             it.links.mission_patch_small,
                             it.launch_success,
                             it.upcoming,
-                            it.details)
+                            it.details,
+                            it.links.flickr_images)
                     } ?: emptyList()
                     Result.success(l)
                 } else {

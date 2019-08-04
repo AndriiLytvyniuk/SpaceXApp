@@ -22,7 +22,7 @@ import java.util.*
 
 private const val TYPE_LAUNCH_ITEM = 0
 private const val TYPE_PROGRESS = 1
-private val DATE_FORMAT = SimpleDateFormat("MMM dd, yyyy")
+private val DATE_FORMAT = SimpleDateFormat("MMM dd, yyyy", Locale.US)
 
 class LaunchesAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
@@ -69,7 +69,10 @@ class LaunchesAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                 (it.context as FragmentActivity)
                     .supportFragmentManager
                     .beginTransaction()
-                    .add(R.id.fragmentContainer, LaunchDetailsFragment(), "launch_details")
+                    .add(
+                        R.id.fragmentContainer,
+                        LaunchDetailsFragment().apply { setArguments(adapterPosition) },
+                        "launch_details")
                     .addToBackStack(null)
                     .commit()
             }

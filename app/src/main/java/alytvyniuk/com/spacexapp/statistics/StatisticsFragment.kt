@@ -31,7 +31,7 @@ class StatisticsFragment: Fragment() {
         super.onCreate(savedInstanceState)
         App.component().inject(this)
         viewModel = ViewModelProviders.of(
-            this,
+            requireActivity(),
             launchesModelFactory
         ).get(LaunchesViewModel::class.java)
     }
@@ -109,7 +109,6 @@ class StatisticsFragment: Fragment() {
                 iterator++
             }
         }
-        //Log.d("Andrii", "getLaunchesPerMonth2 ${statisticsList.size} ${statisticsList[statisticsList.size -1].year} ${statisticsList[statisticsList.size -1].month}")
         return statisticsList
     }
 }

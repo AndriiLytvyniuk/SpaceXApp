@@ -8,5 +8,6 @@ data class LaunchData (
     val missionImage: String?,
     val isSuccess: Boolean?,
     val isUpcoming: Boolean,
-    val details: String?
+    val details: String?,
+    val images: List<String>
 )

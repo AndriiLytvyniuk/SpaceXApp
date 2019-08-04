@@ -29,7 +29,7 @@ class LaunchesFragment: Fragment() {
         super.onCreate(savedInstanceState)
         App.component().inject(this)
         viewModel = ViewModelProviders.of(
-            this,
+            requireActivity(),
             launchesModelFactory
         ).get(LaunchesViewModel::class.java)
     }

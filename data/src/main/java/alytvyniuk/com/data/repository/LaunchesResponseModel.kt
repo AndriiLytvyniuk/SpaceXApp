@@ -148,7 +148,7 @@ internal data class Core(
 
 internal data class Links(
     val article_link: Any,
-    val flickr_images: List<Any>,
+    val flickr_images: List<String>,
     val mission_patch: Any,
     val mission_patch_small: String,
     val presskit: Any,
