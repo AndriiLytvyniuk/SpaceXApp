@@ -23,7 +23,7 @@ class LaunchDetailsFragment: Fragment() {
         super.onCreate(savedInstanceState)
         viewModel = ViewModelProviders.of(
             requireActivity(),
-            App.component().launchesModelFactory()
+            App.component.launchesModelFactory()
         ).get(LaunchesViewModel::class.java)
     }
 

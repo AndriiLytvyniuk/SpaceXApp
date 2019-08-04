@@ -72,7 +72,6 @@ class StatisticsAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             itemView.launchesNumberText.visibility = View.INVISIBLE
             val height = parentHeight.toDouble() * 0.7 * item.launchesNumber / maxLaunches
             itemView.graphView.layoutParams.height = height.toInt()
-            Log.d("Andrii", "height = ${height}")
             itemView.graphView.invalidate()
         }
     }

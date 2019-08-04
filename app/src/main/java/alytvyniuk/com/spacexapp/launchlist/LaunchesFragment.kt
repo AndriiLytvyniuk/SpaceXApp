@@ -28,7 +28,7 @@ class LaunchesFragment: Fragment() {
         super.onCreate(savedInstanceState)
         viewModel = ViewModelProviders.of(
             requireActivity(),
-            App.component().launchesModelFactory()
+            App.component.launchesModelFactory()
         ).get(LaunchesViewModel::class.java)
     }
 
@@ -36,7 +36,7 @@ class LaunchesFragment: Fragment() {
         super.onViewCreated(view, savedInstanceState)
         Log.d("Andrii", "onViewCreated")
         val context = view.context
-        val adapter = LaunchesAdapter(App.component().imageLoader())
+        val adapter = LaunchesAdapter(App.component.imageLoader())
 
         launchesRecyclerView.apply {
             val layoutManager = LinearLayoutManager(context)
@@ -69,10 +69,6 @@ class LaunchesFragment: Fragment() {
             }
 
         })
-
-        if (viewModel.launchesLiveData.value.isNullOrEmpty()) {
-            viewModel.requestMoreLaunches()
-        }
     }
 
     private class SpaceItemDecoration(private val spaceSize: Int): RecyclerView.ItemDecoration() {

@@ -16,6 +16,7 @@ import android.os.Environment
 
 
 private const val KEY_IMAGE_URL = "KEY_IMAGE_URL"
+private const val DOWNLOAD_BUTTON_SHOW_TIME = 2000L
 
 class LaunchImageFragment: Fragment() {
 
@@ -33,13 +34,13 @@ class LaunchImageFragment: Fragment() {
         super.onViewCreated(view, savedInstanceState)
         val imageUrl = arguments?.getString(KEY_IMAGE_URL)
         if (imageUrl != null) {
-            App.component().imageLoader().loadImage(imageUrl, launchImage)
+            App.component.imageLoader().loadImage(imageUrl, launchImage)
             downloadButton.setOnClickListener {
                 downloadImage(imageUrl)
             }
             launchImage.setOnClickListener {
                 downloadButton.show()
-                downloadButton.postDelayed({downloadButton.hide()}, 2000)
+                downloadButton.postDelayed({downloadButton.hide()}, DOWNLOAD_BUTTON_SHOW_TIME)
             }
         }
     }

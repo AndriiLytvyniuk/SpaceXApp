@@ -7,6 +7,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
+import androidx.lifecycle.ViewModelProviders
 import kotlinx.android.synthetic.main.activity_main.*
 
 
@@ -19,6 +20,13 @@ class MainActivity : AppCompatActivity() {
         val fragmentsNumber = 2
         viewPager.adapter = TabsAdapter(supportFragmentManager, fragmentsNumber, this)
         tabLayout.setupWithViewPager(viewPager)
+        val viewModel = ViewModelProviders.of(
+            this,
+            App.component.launchesModelFactory()
+        ).get(LaunchesViewModel::class.java)
+        if (viewModel.launchesLiveData.value.isNullOrEmpty()) {
+            viewModel.requestMoreLaunches()
+        }
     }
 
     inner class TabsAdapter(

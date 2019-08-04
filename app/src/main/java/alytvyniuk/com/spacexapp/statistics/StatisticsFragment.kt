@@ -13,7 +13,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.fragment_statistics.*
 import java.util.*
-import javax.inject.Inject
 
 class StatisticsFragment: Fragment() {
 
@@ -22,17 +21,13 @@ class StatisticsFragment: Fragment() {
         return inflater.inflate(R.layout.fragment_statistics, container, false)
     }
 
-    @Inject
-    lateinit var launchesModelFactory: LaunchesModelFactory
-
     private lateinit var viewModel: LaunchesViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        App.component().inject(this)
         viewModel = ViewModelProviders.of(
             requireActivity(),
-            launchesModelFactory
+            App.component.launchesModelFactory()
         ).get(LaunchesViewModel::class.java)
     }
 
@@ -69,9 +64,6 @@ class StatisticsFragment: Fragment() {
         viewModel.allItemsReceived.observe(this, Observer {
             adapter.allItemsReceived = it
         })
-        if (viewModel.launchesLiveData.value.isNullOrEmpty()) {
-            viewModel.requestMoreLaunches()
-        }
     }
 
     private fun getLaunchesPerMonth(launchesListItems: List<LaunchesListItem>): List<StatisticsItem> {
@@ -79,7 +71,7 @@ class StatisticsFragment: Fragment() {
             .asSequence()
             .takeWhile { it is LaunchesDataItem }
             .groupingBy {
-                val date = ((it as LaunchesDataItem).launchData.missionDate).toLong() * 1000
+                val date = (it as LaunchesDataItem).launchData.missionDate
                 val c = Calendar.getInstance()
                 c.time = Date(date)
                 c.get(Calendar.YEAR) * 100 + c.get(Calendar.MONTH) + 1
@@ -87,7 +79,7 @@ class StatisticsFragment: Fragment() {
             .eachCount()
             .toMutableMap()
 
-        //Log.d("Andrii", "getLaunchesPerMonth1 $launchesPerMonth")
+        Log.d("Andrii", "getLaunchesPerMonth1 $launchesPerMonth")
         val statisticsList = mutableListOf<StatisticsItem>()
 
         val min = launchesPerMonth.minBy { it.key } ?: return statisticsList
