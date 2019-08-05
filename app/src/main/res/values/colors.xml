@@ -7,4 +7,6 @@
     <color name="successful_launch">#00ff00</color>
     <color name="failed_launch">#ff0000</color>
     <color name="light_gray">#ccc</color>
+    <color name="dark_gray">#aaaaaa</color>
+    <color name="graph_color">#00ff00</color>
 </resources>

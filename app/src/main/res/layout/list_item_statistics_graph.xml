@@ -26,8 +26,8 @@
 
     <View
             android:id="@+id/graphView"
-            android:background="@android:color/holo_green_dark"
+            android:background="@color/graph_color"
             android:layout_width="match_parent"
-            android:layout_height="20dp"/>
+            android:layout_height="0dp"/>
 
 </LinearLayout>

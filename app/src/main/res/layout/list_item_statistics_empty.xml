@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<View
+<FrameLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="10dp"
-        android:background="@android:color/holo_orange_light"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent">
+
+    <View
+            android:layout_gravity="bottom"
+            android:background="@color/graph_color"
+            android:layout_width="match_parent"
+            android:layout_height="5dp"/>
+</FrameLayout>

@@ -2,7 +2,6 @@ package alytvyniuk.com.spacexapp
 
 import alytvyniuk.com.model.LaunchData
 import android.content.Context
-import android.graphics.drawable.ColorDrawable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
