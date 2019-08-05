@@ -2,10 +2,7 @@ package alytvyniuk.com.spacexapp.launchlist
 
 import alytvyniuk.com.model.ImageLoader
 import alytvyniuk.com.model.LaunchData
-import alytvyniuk.com.spacexapp.LaunchesDataItem
-import alytvyniuk.com.spacexapp.LaunchesListItem
-import alytvyniuk.com.spacexapp.ProgressItem
-import alytvyniuk.com.spacexapp.R
+import alytvyniuk.com.spacexapp.*
 import alytvyniuk.com.spacexapp.launchdetails.LaunchDetailsFragment
 import android.graphics.drawable.ColorDrawable
 import android.view.LayoutInflater
@@ -85,7 +82,7 @@ class LaunchesAdapter(private val imageLoader: ImageLoader): RecyclerView.Adapte
                     R.string.launch_date,
                     DATE_FORMAT.format(Date(missionDate))
                 )
-                itemView.colorFrame.background = getCardBackground(this)
+                itemView.colorFrame.setBackgroundColor(this.getLaunchStatusColor(context))
                 missionImage.let {
                     if (it != null) {
                         imageLoader.loadImage(it, itemView.missionImage)
@@ -97,16 +94,6 @@ class LaunchesAdapter(private val imageLoader: ImageLoader): RecyclerView.Adapte
             }
         }
 
-        private fun getCardBackground(launchData: LaunchData) = ColorDrawable(
-            ContextCompat.getColor(
-                itemView.context,
-                when {
-                    launchData.isUpcoming -> R.color.upcoming_launch
-                    launchData.isSuccess == true -> R.color.successful_launch
-                    else -> R.color.failed_launch
-                }
-            )
-        )
     }
 
 

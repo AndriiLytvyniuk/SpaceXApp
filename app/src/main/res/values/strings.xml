@@ -4,5 +4,9 @@
     <string name="statistics">Statistics</string>
     <string name="rocket_name">Rocket name: %1$s</string>
     <string name="launch_date">Launch Date: %1$s</string>
+    <string name="launch_status">Launch Status:</string>
+    <string name="upcoming">Upcoming</string>
+    <string name="successful">Successful</string>
+    <string name="failure">Failure</string>
 
 </resources>
