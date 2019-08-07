@@ -85,9 +85,7 @@ class LaunchesAdapter(private val imageLoader: ImageLoader): RecyclerView.Adapte
                 itemView.colorFrame.setBackgroundColor(this.getLaunchStatusColor(context))
                 missionImage.let {
                     if (it != null) {
-                        imageLoader.loadImage(it, itemView.missionImage)
-                    } else {
-                        //TODO
+                        imageLoader.loadImage(it, itemView.missionImage, ContextCompat.getDrawable(context, R.mipmap.ic_launcher))
                     }
                 }
 

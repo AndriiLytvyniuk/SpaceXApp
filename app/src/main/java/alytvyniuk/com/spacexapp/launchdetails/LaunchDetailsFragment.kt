@@ -53,8 +53,6 @@ class LaunchDetailsFragment : Fragment() {
         data.missionImage.let {
             if (it != null) {
                 App.component.imageLoader().loadImage(it, missionImage)
-            } else {
-                //TODO
             }
         }
         data.images.let {

@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#008577</color>
-    <color name="colorPrimaryDark">#00574B</color>
+    <color name="colorPrimary">#085DAD</color>
+    <color name="colorPrimaryDark">#062c70</color>
     <color name="colorAccent">#D81B60</color>
-    <color name="upcoming_launch">#0000ff</color>
-    <color name="successful_launch">#00ff00</color>
-    <color name="failed_launch">#ff0000</color>
+    <color name="upcoming_launch">#03A9F4</color>
+    <color name="successful_launch">#4CAF50</color>
+    <color name="failed_launch">#b71c1c</color>
     <color name="light_gray">#ccc</color>
     <color name="dark_gray">#aaaaaa</color>
-    <color name="graph_color">#00ff00</color>
+    <color name="graph_color">#FF5722</color>
 </resources>
