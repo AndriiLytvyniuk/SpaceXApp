@@ -11,15 +11,19 @@
             android:layout_gravity="top|center_horizontal"
             android:gravity="bottom"
             android:layout_weight="1"
-            android:text="Sep 2026"
+            tools:text="Sep 2026"
             android:layout_marginTop="20dp"
-            android:layout_marginBottom="30dp"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:layout_height="0dp"/>
 
     <TextView
             android:id="@+id/launchesNumberText"
             tools:text="10"
+            android:paddingBottom="20dp"
+            android:paddingTop="20dp"
+            android:textColor="@color/graph_color"
+            android:textSize="@dimen/text_large"
+            android:textStyle="bold"
             android:gravity="center"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>

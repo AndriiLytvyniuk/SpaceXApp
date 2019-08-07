@@ -8,5 +8,7 @@
     <string name="upcoming">Upcoming</string>
     <string name="successful">Successful</string>
     <string name="failure">Failure</string>
+    <string name="time">Time</string>
+    <string name="number_of_launches">Number Of Launches</string>
 
 </resources>
