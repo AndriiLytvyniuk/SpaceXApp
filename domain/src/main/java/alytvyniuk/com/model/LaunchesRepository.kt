@@ -4,5 +4,5 @@ import io.reactivex.Single
 
 interface LaunchesRepository {
 
-    fun getLaunchesInRange(start: Int, count: Int) : Single<Result<List<LaunchData>>>
+    fun getLaunchesInRange(start: Int, count: Int) : Single<LaunchesResponse>
 }

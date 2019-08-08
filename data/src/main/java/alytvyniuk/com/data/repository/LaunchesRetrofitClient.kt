@@ -1,15 +1,15 @@
 package alytvyniuk.com.data.repository
 
-import alytvyniuk.com.model.LaunchData
-import alytvyniuk.com.model.LaunchesRepository
+import alytvyniuk.com.model.*
 import io.reactivex.Single
 
 internal class LaunchesRetrofitClient(private val launchesRetrofitApi: LaunchesRetrofitApi) : LaunchesRepository {
-    override fun getLaunchesInRange(start: Int, count: Int): Single<Result<List<LaunchData>>> {
+
+    override fun getLaunchesInRange(start: Int, count: Int): Single<LaunchesResponse> {
         return launchesRetrofitApi.getLaunches(start, count)
-            .map { t ->
-                if (t.isSuccessful) {
-                    val l = t.body()?.map {
+            .map { response ->
+                if (response.isSuccessful) {
+                    val l = response.body()?.map {
                         LaunchData(
                             it.flight_number,
                             it.mission_name,
@@ -19,11 +19,12 @@ internal class LaunchesRetrofitClient(private val launchesRetrofitApi: LaunchesR
                             it.launch_success,
                             it.upcoming,
                             it.details,
-                            it.links.flickr_images)
+                            it.links.flickr_images
+                        )
                     } ?: emptyList()
-                    Result.success(l)
+                    SuccessResponse(l)
                 } else {
-                    Result.failure(Throwable(t.message()))
+                    FailureResponse(Throwable(response.message()))
                 }
             }
     }

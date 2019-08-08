@@ -8,6 +8,9 @@ import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 
 fun <T> MutableList<T>.insertFromPosition(start: Int, listToMerge: List<T>) {
+    if (listToMerge.isEmpty()) {
+        return
+    }
     if (start > size) {
         throw IllegalArgumentException("Start position is bigger than possible")
     }
