@@ -10,5 +10,6 @@
     <string name="failure">Failure</string>
     <string name="time">Time</string>
     <string name="number_of_launches">Number Of Launches</string>
+    <string name="connection_error">There was an error while loading data</string>
 
 </resources>

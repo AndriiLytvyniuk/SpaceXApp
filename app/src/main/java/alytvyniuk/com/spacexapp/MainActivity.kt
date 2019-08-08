@@ -4,9 +4,11 @@ import alytvyniuk.com.spacexapp.launchlist.LaunchesFragment
 import alytvyniuk.com.spacexapp.statistics.StatisticsFragment
 import android.content.Context
 import android.os.Bundle
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -27,7 +29,9 @@ class MainActivity : AppCompatActivity() {
         if (viewModel.launchesLiveData.value.isNullOrEmpty()) {
             viewModel.requestMoreLaunches()
         }
-
+        viewModel.errorLiveData.observe(this, Observer {
+            Toast.makeText(this, R.string.connection_error, Toast.LENGTH_LONG).show()
+        })
     }
 
     inner class TabsAdapter(

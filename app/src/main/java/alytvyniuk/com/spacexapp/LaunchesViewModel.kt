@@ -64,7 +64,7 @@ class LaunchesViewModel(private val launchesRepository: LaunchesRepository) : Vi
                     _launchesLiveData.value = oldItems
                 }
             }, { t ->
-
+                _errorLiveData.value = t
             })
         )
     }
