@@ -2,6 +2,8 @@ package alytvyniuk.com.spacexapp.launchdetails
 
 import alytvyniuk.com.model.LaunchData
 import alytvyniuk.com.spacexapp.*
+import alytvyniuk.com.spacexapp.utils.getLaunchStatusColor
+import alytvyniuk.com.spacexapp.utils.inflate
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View

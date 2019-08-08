@@ -1,10 +1,9 @@
 package alytvyniuk.com.spacexapp.launchlist
 
 import alytvyniuk.com.model.ImageLoader
-import alytvyniuk.com.model.LaunchData
 import alytvyniuk.com.spacexapp.*
 import alytvyniuk.com.spacexapp.launchdetails.LaunchDetailsFragment
-import android.graphics.drawable.ColorDrawable
+import alytvyniuk.com.spacexapp.utils.getLaunchStatusColor
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup

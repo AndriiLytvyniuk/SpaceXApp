@@ -3,8 +3,12 @@ package alytvyniuk.com.spacexapp
 import alytvyniuk.com.model.LaunchData
 import alytvyniuk.com.model.LaunchesRepository
 import alytvyniuk.com.model.SuccessResponse
-import android.util.Log
-import androidx.lifecycle.*
+import alytvyniuk.com.spacexapp.utils.EventLiveData
+import alytvyniuk.com.spacexapp.utils.insertFromPosition
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
@@ -14,14 +18,18 @@ private const val REQUEST_THRESHOLD = 10
 
 class LaunchesViewModel(private val launchesRepository: LaunchesRepository) : ViewModel() {
 
-
-    private val _launchesLiveData = MutableLiveData<MutableList<LaunchesListItem>>().apply { this.value = mutableListOf() }
+    private val _launchesLiveData =
+        MutableLiveData<MutableList<LaunchesListItem>>().apply { this.value = mutableListOf() }
     val launchesLiveData: LiveData<MutableList<LaunchesListItem>>
         get() = _launchesLiveData
 
     private val _allItemsReceived = MutableLiveData<Boolean>()
     val allItemsReceived: LiveData<Boolean>
-    get() = _allItemsReceived
+        get() = _allItemsReceived
+
+    private val _errorLiveData = EventLiveData<Throwable>()
+    val errorLiveData: LiveData<Throwable>
+        get() = _errorLiveData
 
     private val disposables = CompositeDisposable()
 
@@ -35,8 +43,6 @@ class LaunchesViewModel(private val launchesRepository: LaunchesRepository) : Vi
         items.addAll(List(count) { ProgressItem })
         _launchesLiveData.value = items
 
-        Log.d("Andrii", "requestMoreLaunches from $start to ${start + count}")
-
         disposables.add(launchesRepository.getLaunchesInRange(start, count)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
@@ -44,7 +50,6 @@ class LaunchesViewModel(private val launchesRepository: LaunchesRepository) : Vi
                 if (result is SuccessResponse) {
                     val oldItems = _launchesLiveData.value ?: mutableListOf()
                     val newItems = result.launches
-                    Log.d("Andrii", "received from $start to ${start + count} size ${newItems.size}" )
                     oldItems.insertFromPosition(
                         start,
                         result.launches.map { LaunchesDataItem(it) }
@@ -55,13 +60,13 @@ class LaunchesViewModel(private val launchesRepository: LaunchesRepository) : Vi
                         repeat(count - newItems.size) {
                             oldItems.removeAt(oldItems.size - 1)
                         }
-                        Log.d("Andrii", "End reached $start to ${start + count} size ${newItems.size} before $before " )
                     }
                     _launchesLiveData.value = oldItems
                 }
             }, { t ->
-                Log.e("Andrii", "exception", t)
-            }))
+
+            })
+        )
     }
 
     override fun onCleared() {

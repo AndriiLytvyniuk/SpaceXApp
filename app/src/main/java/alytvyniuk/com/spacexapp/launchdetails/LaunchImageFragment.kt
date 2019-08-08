@@ -2,7 +2,7 @@ package alytvyniuk.com.spacexapp.launchdetails
 
 import alytvyniuk.com.spacexapp.App
 import alytvyniuk.com.spacexapp.R
-import alytvyniuk.com.spacexapp.inflate
+import alytvyniuk.com.spacexapp.utils.inflate
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View

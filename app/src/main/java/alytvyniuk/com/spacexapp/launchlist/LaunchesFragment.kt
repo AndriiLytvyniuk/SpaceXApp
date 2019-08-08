@@ -3,10 +3,9 @@ package alytvyniuk.com.spacexapp.launchlist
 import alytvyniuk.com.spacexapp.App
 import alytvyniuk.com.spacexapp.LaunchesViewModel
 import alytvyniuk.com.spacexapp.R
-import alytvyniuk.com.spacexapp.inflate
+import alytvyniuk.com.spacexapp.utils.inflate
 import android.graphics.Rect
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -34,7 +33,6 @@ class LaunchesFragment: Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        Log.d("Andrii", "onViewCreated")
         val context = view.context
         val adapter = LaunchesAdapter(App.component.imageLoader())
 
@@ -54,7 +52,6 @@ class LaunchesFragment: Fragment() {
                 override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                     super.onScrolled(recyclerView, dx, dy)
                     val lastPosition = layoutManager.findLastCompletelyVisibleItemPosition()
-                    //Log.d("Andrii", "onScrollStateChanged ${layoutManager.findLastCompletelyVisibleItemPosition()}")
                     if (lastPosition > (viewModel.launchesLiveData.value?.size ?: 0) - 3) {
                         viewModel.requestMoreLaunches()
                     }

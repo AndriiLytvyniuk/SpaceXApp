@@ -27,6 +27,7 @@ class MainActivity : AppCompatActivity() {
         if (viewModel.launchesLiveData.value.isNullOrEmpty()) {
             viewModel.requestMoreLaunches()
         }
+
     }
 
     inner class TabsAdapter(

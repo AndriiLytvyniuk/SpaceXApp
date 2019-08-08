@@ -2,7 +2,6 @@ package alytvyniuk.com.spacexapp.statistics
 
 import alytvyniuk.com.spacexapp.*
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,7 +16,6 @@ import java.util.*
 class StatisticsFragment: Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        Log.d("Andrii", "onCreateView StatisticsFragment")
         return inflater.inflate(R.layout.fragment_statistics, container, false)
     }
 
@@ -33,7 +31,6 @@ class StatisticsFragment: Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        Log.d("Andrii", "onViewCreated")
         val context = view.context
         val adapter = StatisticsAdapter()
 
@@ -46,7 +43,6 @@ class StatisticsFragment: Fragment() {
                 override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                     super.onScrolled(recyclerView, dx, dy)
                     val lastPosition = layoutManager.findLastCompletelyVisibleItemPosition()
-                    //Log.d("Andrii", "onScrollStateChanged ${layoutManager.findLastCompletelyVisibleItemPosition()}")
                     if (lastPosition > (recyclerView.adapter?.itemCount ?: 0) - 5) {
                         viewModel.requestMoreLaunches()
                     }
@@ -79,7 +75,6 @@ class StatisticsFragment: Fragment() {
             .eachCount()
             .toMutableMap()
 
-        Log.d("Andrii", "getLaunchesPerMonth1 $launchesPerMonth")
         val statisticsList = mutableListOf<StatisticsItem>()
 
         val min = launchesPerMonth.minBy { it.key } ?: return statisticsList
@@ -87,7 +82,6 @@ class StatisticsFragment: Fragment() {
         while(launchesPerMonth.isNotEmpty()) {
             val launchesNumber = launchesPerMonth.remove(iterator) ?: 0
             val month = iterator % 100
-            //Log.d("Andrii", "yearMonth $iterator")
             statisticsList.add(
                 StatisticsItem(
                     launchesNumber,
