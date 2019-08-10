@@ -51,7 +51,7 @@ class LaunchesViewModel(private val launchesRepository: LaunchesRepository) : Vi
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({ result ->
                 if (result is SuccessResponse) {
-                    val oldItems = items.toMutableList()
+                    val oldItems = launchesLiveData.value?.toMutableList() ?: mutableListOf()
                     val newItems = result.launches
                     oldItems.insertFromPosition(
                         start,
