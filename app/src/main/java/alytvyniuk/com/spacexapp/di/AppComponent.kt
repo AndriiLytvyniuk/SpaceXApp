@@ -1,6 +1,5 @@
 package alytvyniuk.com.spacexapp.di
 
-import alytvyniuk.com.data.repository.di.AppContextModule
 import alytvyniuk.com.data.repository.di.ImageLoaderModule
 import alytvyniuk.com.data.repository.di.RepositoriesModule
 import alytvyniuk.com.model.ImageLoader
@@ -12,8 +11,7 @@ import javax.inject.Singleton
 @Singleton
 @Component(
     modules = [RepositoriesModule::class,
-        ImageLoaderModule::class,
-        AppContextModule::class]
+        ImageLoaderModule::class]
 
 )
 interface AppComponent {

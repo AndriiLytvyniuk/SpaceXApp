@@ -1,7 +1,7 @@
 package alytvyniuk.com.spacexapp
 
 import alytvyniuk.com.spacexapp.di.AppComponent
-import alytvyniuk.com.spacexapp.di.ComponentHolder
+import alytvyniuk.com.spacexapp.di.DaggerAppComponent
 import android.app.Application
 
 open class App : Application() {
@@ -13,6 +13,6 @@ open class App : Application() {
 
     override fun onCreate() {
         super.onCreate()
-        component = ComponentHolder.getComponent(this)
+        component = DaggerAppComponent.builder().build()
     }
 }
