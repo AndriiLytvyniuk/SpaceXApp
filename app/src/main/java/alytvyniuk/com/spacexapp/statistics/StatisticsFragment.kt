@@ -62,8 +62,8 @@ class StatisticsFragment: Fragment() {
         })
     }
 
-    private fun getLaunchesPerMonth(launchesListItems: List<LaunchesListItem>): List<StatisticsItem> {
-        val launchesPerMonth = launchesListItems
+    private fun getLaunchesPerMonth(launchesItems: List<LaunchesItem>): List<StatisticsItem> {
+        val launchesPerMonth = launchesItems
             .asSequence()
             .takeWhile { it is LaunchesDataItem }
             .groupingBy {

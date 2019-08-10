@@ -1,10 +1,12 @@
 package alytvyniuk.com.spacexapp
 
+import alytvyniuk.com.model.FailureResponse
 import alytvyniuk.com.model.LaunchData
 import alytvyniuk.com.model.LaunchesRepository
 import alytvyniuk.com.model.SuccessResponse
 import alytvyniuk.com.spacexapp.utils.EventLiveData
 import alytvyniuk.com.spacexapp.utils.insertFromPosition
+import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -14,13 +16,14 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
-private const val REQUEST_THRESHOLD = 10
+@VisibleForTesting
+const val REQUEST_THRESHOLD = 10
 
 class LaunchesViewModel(private val launchesRepository: LaunchesRepository) : ViewModel() {
 
     private val _launchesLiveData =
-        MutableLiveData<MutableList<LaunchesListItem>>().apply { this.value = mutableListOf() }
-    val launchesLiveData: LiveData<MutableList<LaunchesListItem>>
+        MutableLiveData<MutableList<LaunchesItem>>()
+    val launchesLiveData: LiveData<MutableList<LaunchesItem>>
         get() = _launchesLiveData
 
     private val _allItemsReceived = MutableLiveData<Boolean>()
@@ -37,7 +40,7 @@ class LaunchesViewModel(private val launchesRepository: LaunchesRepository) : Vi
         if (allItemsReceived.value == true) {
             return
         }
-        val items = launchesLiveData.value ?: mutableListOf()
+        val items = launchesLiveData.value?.toMutableList() ?: mutableListOf()
         val start = items.size
         val count = REQUEST_THRESHOLD
         items.addAll(List(count) { ProgressItem })
@@ -48,7 +51,7 @@ class LaunchesViewModel(private val launchesRepository: LaunchesRepository) : Vi
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({ result ->
                 if (result is SuccessResponse) {
-                    val oldItems = _launchesLiveData.value ?: mutableListOf()
+                    val oldItems = items.toMutableList()
                     val newItems = result.launches
                     oldItems.insertFromPosition(
                         start,
@@ -56,15 +59,16 @@ class LaunchesViewModel(private val launchesRepository: LaunchesRepository) : Vi
                     )
                     if (newItems.size < count) {
                         _allItemsReceived.value = true
-                        val before = oldItems.size
                         repeat(count - newItems.size) {
                             oldItems.removeAt(oldItems.size - 1)
                         }
                     }
                     _launchesLiveData.value = oldItems
+                } else if (result is FailureResponse) {
+                    _errorLiveData.value = result.error
                 }
-            }, { t ->
-                _errorLiveData.value = t
+            }, { error ->
+                _errorLiveData.value = error
             })
         )
     }
@@ -85,6 +89,6 @@ class LaunchesModelFactory @Inject constructor(
     }
 }
 
-sealed class LaunchesListItem
-data class LaunchesDataItem(val launchData: LaunchData) : LaunchesListItem()
-object ProgressItem : LaunchesListItem()
+sealed class LaunchesItem
+data class LaunchesDataItem(val launchData: LaunchData) : LaunchesItem()
+object ProgressItem : LaunchesItem()

@@ -20,9 +20,9 @@ private val DATE_FORMAT = SimpleDateFormat("MMM dd, yyyy", Locale.US)
 
 class LaunchesAdapter(private val imageLoader: ImageLoader): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    private var items = listOf<LaunchesListItem>()
+    private var items = listOf<LaunchesItem>()
 
-    fun insertItems(newItems: List<LaunchesListItem>) {
+    fun insertItems(newItems: List<LaunchesItem>) {
         items = newItems
     }
 
