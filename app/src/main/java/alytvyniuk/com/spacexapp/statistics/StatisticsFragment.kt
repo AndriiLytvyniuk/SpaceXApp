@@ -1,6 +1,7 @@
 package alytvyniuk.com.spacexapp.statistics
 
 import alytvyniuk.com.spacexapp.*
+import alytvyniuk.com.spacexapp.utils.viewModelProvider
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -15,31 +16,23 @@ import java.util.*
 
 class StatisticsFragment: Fragment() {
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        return inflater.inflate(R.layout.fragment_statistics, container, false)
+    private val viewModel by viewModelProvider<LaunchesViewModel>{
+        App.component.launchesModelFactory()
     }
 
-    private lateinit var viewModel: LaunchesViewModel
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        viewModel = ViewModelProviders.of(
-            requireActivity(),
-            App.component.launchesModelFactory()
-        ).get(LaunchesViewModel::class.java)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+        return inflater.inflate(R.layout.fragment_statistics, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val context = view.context
-        val adapter = StatisticsAdapter()
+
 
         statisticsRecyclerView.apply {
             val layoutManager = LinearLayoutManager(context, RecyclerView.HORIZONTAL, false)
             this.layoutManager = layoutManager
-            this.adapter = adapter
             addOnScrollListener(object : RecyclerView.OnScrollListener() {
-
                 override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                     super.onScrolled(recyclerView, dx, dy)
                     val lastPosition = layoutManager.findLastCompletelyVisibleItemPosition()
@@ -49,7 +42,12 @@ class StatisticsFragment: Fragment() {
                 }
             })
         }
+    }
 
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        val adapter = StatisticsAdapter()
+        statisticsRecyclerView.adapter = adapter
         viewModel.launchesLiveData.observe(this, Observer { launches ->
             statisticsRecyclerView.post {
                 val items = getLaunchesPerMonth(launches)

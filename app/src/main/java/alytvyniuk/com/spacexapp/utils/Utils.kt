@@ -44,7 +44,7 @@ fun LaunchData.getLaunchStatusColor(context: Context) =
 
 inline fun <reified T : ViewModel> Fragment.viewModelProvider(
     crossinline factoryProvider: () -> ViewModelProvider.Factory
-): Lazy<T> = lazy { ViewModelProviders.of(this, factoryProvider()).get(T::class.java) }
+): Lazy<T> = lazy { ViewModelProviders.of(this.requireActivity(), factoryProvider()).get(T::class.java) }
 
 inline fun <reified R> createViewModelFactory(
     crossinline viewModelProvider: () -> ViewModel

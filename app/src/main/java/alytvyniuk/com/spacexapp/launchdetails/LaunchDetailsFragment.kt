@@ -4,12 +4,12 @@ import alytvyniuk.com.model.LaunchData
 import alytvyniuk.com.spacexapp.*
 import alytvyniuk.com.spacexapp.utils.getLaunchStatusColor
 import alytvyniuk.com.spacexapp.utils.inflate
+import alytvyniuk.com.spacexapp.utils.viewModelProvider
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProviders
 import kotlinx.android.synthetic.main.fragment_launch_details.*
 import kotlinx.android.synthetic.main.fragment_launch_details.missionDate
 import kotlinx.android.synthetic.main.fragment_launch_details.missionName
@@ -22,21 +22,15 @@ private val DATE_FORMAT = SimpleDateFormat("MMM dd, yyyy", Locale.US)
 
 class LaunchDetailsFragment : Fragment() {
 
-    private lateinit var viewModel: LaunchesViewModel
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        viewModel = ViewModelProviders.of(
-            requireActivity(),
-            App.component.launchesModelFactory()
-        ).get(LaunchesViewModel::class.java)
+    private val viewModel by viewModelProvider<LaunchesViewModel>{
+        App.component.launchesModelFactory()
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) =
         container?.inflate(R.layout.fragment_launch_details)
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
         val launchIndex = arguments?.getInt(KEY_LAUNCH_INDEX)
         if (launchIndex != null) {
             val launchListItem = viewModel.launchesLiveData.value?.get(launchIndex)
