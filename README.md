@@ -13,6 +13,7 @@ Displays detailed description about the launch alongside with its photos if they
 
 - Application follows CLEAN architecture. There are 3 modules: *app*, *data* and *domain* and *app* knows only about interfaces and models of *domain*, and there implementaion is hidden in *data* module.
 - Application is implemented by MVVM pattern, and ViewModel is tested by unittests
+- Pagination. SpaceX api allows to get information about all launches at once or get number of launches, but current app implementation doesn't rely on that. It just gets data by small portions, which are requested by UI.
 - Retrofit is used as networking library
 - JavaRx
 - Dagger2 as a DI
